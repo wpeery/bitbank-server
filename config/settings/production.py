@@ -179,3 +179,6 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# django-allauth
+ACCOUNT_ADAPTER = 'config.all_auth_adapters.NoNewUsersAccountAdapter'
