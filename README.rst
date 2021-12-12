@@ -40,7 +40,7 @@ First build the docker image that includes all of the dependencies::
 
 Then run the dev image::
 
-    $ ./run-dev-image  
+    $ ./run-dev-env
 
 Type checks
 ^^^^^^^^^^^
