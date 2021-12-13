@@ -1,10 +1,10 @@
-FROM python:3.8.12
-# not sure what these two lines do but they were in
-# an example I found.
+FROM python:3.9.9
+# Do not generate pyc files
 ENV PYTHONDONTWRITEBYTECODE=1
+# Output is sent straight to terminal without being first buffered
 ENV PYTHONUNBUFFERED=1
 RUN apt-get update \
-    && apt-get install -y ipython3 vim git
+    && apt-get install -y ipython3 vim git postgresql-client-13
 WORKDIR /bitbank/workspace
 COPY requirements/ /bitbank/requirements/
 RUN python -m pip install --upgrade pip

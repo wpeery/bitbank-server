@@ -1,7 +1,16 @@
 version: "3.3"
 
 services:
+  postgres:
+    image: postgres:13.5
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ROOTPASS
   dev:
-    image: test_dep
+    image: bitbank-test-dep
     volumes:
       - .:/bitbank/workspace
+    environment:
+      DATABASE_URL: 'postgres://postgres/postgres?user=postgres&password=ROOTPASS'
+    depends_on:
+      - postgres
