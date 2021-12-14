@@ -1,6 +1,9 @@
 version: "3.3"
 
 services:
+  redis:
+    image: redis:6.2
+    restart: always
   postgres:
     image: postgres:13.5
     restart: always
@@ -12,5 +15,7 @@ services:
       - .:/bitbank/workspace
     environment:
       DATABASE_URL: 'postgres://postgres/postgres?user=postgres&password=ROOTPASS'
+      CELERY_BROKER_URL: 'redis://redis'
     depends_on:
       - postgres
+      - redis

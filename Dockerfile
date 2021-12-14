@@ -4,7 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Output is sent straight to terminal without being first buffered
 ENV PYTHONUNBUFFERED=1
 RUN apt-get update \
-    && apt-get install -y ipython3 vim git postgresql-client-13
+    && apt-get install -y ipython3 vim git postgresql-client-13 redis-tools
 WORKDIR /bitbank/workspace
 COPY requirements/ /bitbank/requirements/
 RUN python -m pip install --upgrade pip
