@@ -13,6 +13,8 @@ services:
     image: bitbank-test-dep
     volumes:
       - .:/bitbank/workspace
+    ports:
+      - "8000:8000"
     environment:
       DATABASE_URL: 'postgres://postgres/postgres?user=postgres&password=ROOTPASS'
       CELERY_BROKER_URL: 'redis://redis'
