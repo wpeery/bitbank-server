@@ -1,14 +1,16 @@
 from django.conf import settings
-from rest_framework.routers import DefaultRouter, SimpleRouter
+from rest_framework import routers
 
-from bitbank.users.api.views import UserViewSet
+from bitbank.users.api import views as user_views
+from bitbank.transfer.api import views as transfer_views
 
 if settings.DEBUG:
-    router = DefaultRouter()
+    router = routers.DefaultRouter()
 else:
-    router = SimpleRouter()
+    router = routers.SimpleRouter()
 
-router.register("users", UserViewSet)
+router.register("users", user_views.UserViewSet)
+router.register("transfer", transfer_views.TransferViewSet, basename="transfer")
 
 
 app_name = "api"

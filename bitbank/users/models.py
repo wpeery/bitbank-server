@@ -1,6 +1,5 @@
 from django.contrib.auth import models as auth_models
 from django.db import models as db_models
-from django.db import transaction
 from django import urls
 from django.utils import translation
 from bitbank.users import errors
@@ -29,15 +28,18 @@ class User(auth_models.AbstractUser):
         return urls.reverse("users:detail", kwargs={"username": self.username})
 
     @staticmethod
-    def transfer_satoshi(from_username: str, to_username: str, amount: int):
-        with transaction.atomic():
-            from_user = User.objects.select_for_update().get(username=from_username)
-            if from_user.satoshis < amount:
-                raise errors.UnableToTransferSatoshis(
-                    translation.gettext_lazy("Not enough satoshis in account")
-                )
-            to_user = User.objects.select_for_update().get(username=to_username)
-            from_user.satoshis -= amount
-            to_user.satoshis += amount
-            from_user.save()
-            to_user.save()
+    def unsafe_transfer_satoshi(from_username: str, to_username: str, amount: int):
+        if from_username == to_username:
+            raise errors.UnableToTransferFunds(
+                translation.gettext_lazy("Cannot transfer satoshis to yourself")
+            )
+        from_user = User.objects.select_for_update().get(username=from_username)
+        if from_user.satoshis < amount:
+            raise errors.NotEnoughFunds(
+                translation.gettext_lazy("Not enough satoshis in account to transfer")
+            )
+        to_user = User.objects.select_for_update().get(username=to_username)
+        from_user.satoshis -= amount
+        to_user.satoshis += amount
+        from_user.save()
+        to_user.save()

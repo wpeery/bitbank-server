@@ -30,4 +30,5 @@ class TestUserViewSet:
             "username": user.username,
             "name": user.name,
             "url": f"http://testserver/api/users/{user.username}/",
+            "satoshis": 0,
         }
