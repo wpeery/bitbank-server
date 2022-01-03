@@ -5,12 +5,13 @@ from rest_framework import test
 
 from bitbank import api_errors
 from bitbank.users import models as user_models
+from bitbank.transfers import models as transfer_models
 from bitbank.users.tests import factories as user_factories
 
 
 pytestmark = pytest.mark.django_db
 
-TRANSFER_URL = urls.reverse("api:transfer-transfer-satoshi")
+TRANSFER_URL = urls.reverse("api:transfers-transfer-satoshi")
 
 
 class TestTransferViewSet:
@@ -24,6 +25,10 @@ class TestTransferViewSet:
         assert response.data == {"success": True}
         assert user_models.User.objects.get(username=from_user.username).satoshis == 900
         assert user_models.User.objects.get(username=user.username).satoshis == 100
+
+        transfer = transfer_models.SatoshiTransfer.objects.get(from_user=from_user)
+        assert transfer.amount == 100
+        assert transfer.to_user == user
 
     def test_transfer_satoshi_not_logged_in(
         self, user: user_models.User, api_client: test.APIClient
